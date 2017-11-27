@@ -13,13 +13,10 @@ from tensorflow.examples.tutorials.mnist import input_data
 import matplotlib.pyplot as plt
 
 
-def compute_accuracy(sess, validation_xs):
+def computed_loss_validation(sess, validation_xs):
     global output
-    y_pre = sess.run(output, feed_dict={xs: validation_xs})
-    correct_prediction = tf.equal(y_pre, validation_xs)
-    accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-    result = sess.run(accuracy, feed_dict={xs: validation_xs})
-    return result
+    calculated_loss_validation = sess.run(loss, feed_dict={xs: validation_xs})
+    return calculated_loss_validation
 
 
 def plot_images(images, cls_true, cls_pred=None):
@@ -132,20 +129,18 @@ def perform_operations():
 
             if i % 50 == 0:
                 print("Step: ", i)
-                accuracy = compute_accuracy(sess, data.validation.images)
-                print("Validation accuracy: ", accuracy)
+                loss = computed_loss_validation(sess, data.validation.images)
+                print("Validation loss: ", loss)
                 x_plot_validation.append(i)
-                y_plot_validation.append(accuracy)
+                y_plot_validation.append(loss)
 
         plt.plot(x_plot_validation, y_plot_validation, label=rate)
-
-        if rate == 0.01:
-            show_images(sess)
+        # show_images(sess)
         sess.close()
 
     # for plotting graph
-    plt.xlabel('epochs')
-    plt.ylabel('accuracy')
+    plt.xlabel('steps')
+    plt.ylabel('loss')
     plt.legend(loc='lower right')
     plt.show()
 
